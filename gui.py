@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import time
 import os
 import threading
@@ -16,7 +18,7 @@ opengif = True  # opens gif in native viewer when done.
 cleanup = True  # file cleaner
 fullchar = False  # uses more characters, but the output file is bigger
 color = False  # sets color on/off
-fullscale = True  # true uses full res, false makes image smaller, lower res
+fullscale = False  # false uses full res, true makes image smaller, lower res
 # END SWITCHES #
 
 os.system('if not exist frames mkdir frames && if not exist generated mkdir generated')
@@ -34,10 +36,10 @@ info = colored('[INFO]', 'green')
 layout = [
     [sg.Text('Select a file:'), sg.InputText(key='-FILE-', enable_events=True), sg.FileBrowse()],
     [sg.Checkbox('Open Final GIF', default=opengif, key='-GIF-', tooltip='Opens the final gif in the native viewer when done.')],
-    [sg.Checkbox('Full Scale', default=fullscale, key='-FULLSCALE-', tooltip='Toggles full-scale mode, turn off if you need a smaller result.')],
     [sg.Checkbox('Cleanup', default=cleanup, key='-CLEAN-', tooltip='Toggles file cleanup on close. Only turn off if you need the extracted/generated frames.')],
     [sg.Checkbox('Use More Characters', default=fullchar, key='-OPTIMIZE-', tooltip='Uses all available characters. Higher res, much bigger file.')],
-    [sg.Checkbox('Color', default=color, key='-COLOR-', tooltip='Toggles color generation mode')],
+    [sg.Checkbox('Use Color', default=color, key='-COLOR-', tooltip='Toggles color generation mode')],
+    [sg.Checkbox(u'SMOL\u2122', default=fullscale, key='-FULLSCALE-', tooltip='Makes the images much smaller, better for sharing if full res is not needed.')],
     [sg.Button('Create GIF')],
     [sg.Text('Frame Extraction:', size=(15, 1)), sg.ProgressBar(100, orientation='h', size=(20, 20), key='-FRAME_EXTRACT_PROGRESS-')],
     [sg.Text('ASCII Generation:', size=(15, 1)), sg.ProgressBar(100, orientation='h', size=(20, 20), key='-IMAGE_GEN_PROGRESS-')],
@@ -67,7 +69,7 @@ while True:
         break
 
 commands = '-s generated --only-save'
-if fullscale:
+if not fullscale:
     commands = commands + ' -f'
     print(warn, f'Using FULLSCALE generation command')
 if fullchar:
