@@ -27,9 +27,8 @@ os.system('if exist raw.gif del /s /q raw.gif >nul')
 os.system('color')
 error = colored('[ERROR]','red')
 warn = colored('[WARN]','yellow')
-ok = colored('[OK]','blue')
+ok = colored('[OK]','cyan')
 info = colored('[INFO]','green')
-start = colored('[START]','magenta')
 
 layout = [
     [sg.Text('Select a file:'), sg.InputText(key='-FILE-', enable_events=True), sg.FileBrowse()],
@@ -76,7 +75,7 @@ if color:
 # Read the GIF or MP4 file using imageio
 frames = imageio.mimread(file_path, memtest=False)
 total_frames = len(frames)
-print(start,f'Extracting {total_frames} frames.')
+print(info,f'Extracting {total_frames} frames.')
 
 frame_extract_progress_bar = window['-FRAME_EXTRACT_PROGRESS-']
 frame_extract_progress_bar.UpdateBar(0, total_frames)
@@ -159,7 +158,7 @@ with ThreadPoolExecutor(max_workers=max_threads) as executor:
 print(ok,'All frames processed.')
 
 # PNG to GIF conversion
-print(start,'Starting ASCII conversion')
+print(info,'Starting ASCII conversion')
 
 png_files = os.listdir(os.getcwd()+r'\generated')
 
@@ -196,7 +195,7 @@ durations = [gif_frame_duration] * len(frames)
 # Add infinite loop parameter to the durations list
 durations.append(0)
 print(ok,'ASCII conversion complete.')
-print(start,'Saving GIF. This may take a while...')
+print(info,'Saving GIF. This may take a while...')
 
 def update_progress():
     image_gen_progress_bar.UpdateBar(processed_frames)
@@ -206,14 +205,14 @@ imageio.mimsave(gif_output_path, frames, duration=durations,
 
 image_gen_progress_bar.UpdateBar(processed_frames)
 print(ok,'GIF created.')
-print(start,'Optimizing GIF.')
+print(info,'Optimizing GIF.')
 os.system('gifsicle.exe raw.gif --colors 256 -o output.gif')
 os.remove('raw.gif')
 
 print(ok,f"GIF optimized and saved as output.gif")
 time.sleep(2)
 if opengif:
-    print(start,'Launching GIF viewer.')
+    print(info,'Launching GIF viewer.')
     os.system('output.gif')
     print(ok,'Launched.')
 if cleanup:
