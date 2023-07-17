@@ -3,3 +3,4 @@ moviepy
 Pillow
 PySimpleGUI
 tqdm
+termcolor
