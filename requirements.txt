@@ -1,0 +1,5 @@
+imageio
+moviepy
+Pillow
+PySimpleGUI
+tqdm
