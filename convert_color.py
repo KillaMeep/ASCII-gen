@@ -1,25 +1,26 @@
-import imageio
-from PIL import Image, ImageDraw
 import time
 import os
 from concurrent.futures import ThreadPoolExecutor
 import threading
 import re
-import sys
-from tkinter import Tk
-from tkinter import filedialog
+from tkinter import Tk, filedialog
+import imageio
+from PIL import Image
 from moviepy.editor import VideoFileClip
 from tqdm import tqdm
 
 os.system('if not exist frames mkdir frames && if not exist generated mkdir generated')
-os.system('if exist frames cd frames && del /s /q *.png >nul')
-os.system('if exist generated cd generated && del /s /q *.png >nul')
+os.system('if exist frames cd frames && del /s /q * >nul')
+os.system('if exist generated cd generated && del /s /q * >nul')
 os.system('if exist output.gif del /s /q output.gif >nul')
 
 root = Tk()
 root.withdraw()
 file_path = filedialog.askopenfilename(filetypes=[("MP4 files", "*.mp4"), ("GIF files", "*.gif")])
 root.destroy()
+
+
+
 
 # Read the GIF or MP4 file using imageio
 frames = imageio.mimread(file_path, memtest=False)
@@ -43,7 +44,7 @@ def get_video_fps(file_path):
                         # Seek to the next frame
                         img.seek(img.tell() + 1)
                         total_frames += 1
-                        total_duration += img.info['duration'] / 1000.0  # Add frame duration in seconds
+                        total_duration += img.info['duration'] / 1000.0
                     except EOFError:
                         break
         else:
@@ -112,11 +113,14 @@ frames_data = {}
 processed_files = 0
 
 for item in png_files:
-    processed_files += 1
-    frame_number = re.sub('[^0-9]', '', item)
-    frames_data[frame_number] = item
-    progress = processed_files / len(png_files) * 100
-    print(f'Reading ASCII files: {progress:.2f}% [{processed_files}/{len(png_files)}]', end='\r', flush=True)
+    if '.png' in item:
+        processed_files += 1
+        frame_number = re.sub('[^0-9]', '', item)
+        frames_data[frame_number] = item
+        progress = processed_files / len(png_files) * 100
+        print(f'Reading ASCII files: {progress:.2f}% [{processed_files}/{len(png_files)}]',
+             end='\r', flush=True)
+    
 
 png_files = []
 
@@ -127,7 +131,7 @@ frames = [imageio.imread(os.path.join('generated', file)) for file in png_files]
 
 fps = int(get_video_fps(file_path))
 frame_duration = calculate_frame_duration(fps, len(frames))
-gif_output_path = 'output.gif'
+gif_output_path = 'raw.gif'
 
 # Set the loop parameter to 0 for infinite looping
 gif_frame_duration = int(frame_duration * 1000)
@@ -144,9 +148,14 @@ progress_bar = tqdm(total=len(frames), desc='Creating GIF')
 def update_progress():
     progress_bar.update(1)
 
-imageio.mimsave(gif_output_path, frames, duration=durations, loop=loop_count, progress_callback=update_progress)
+imageio.mimsave(gif_output_path, frames, duration=durations, 
+                loop=loop_count, progress_callback=update_progress)
 progress_bar.close()
 
-print(f"GIF saved as {gif_output_path}")
+os.system('gifsicle.exe raw.gif --colors 256 -o output.gif')
+os.remove('raw.gif')
+
+
+print(f"GIF saved as output.gif")
 time.sleep(2)
 os.system('output.gif')
