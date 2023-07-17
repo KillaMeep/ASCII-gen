@@ -9,7 +9,7 @@ from moviepy.editor import VideoFileClip
 from tqdm import tqdm
 import imageio
 import subprocess
-
+from termcolor import colored,cprint
 
 # SWITCHES #
 opengif = True  # opens gif in native viewer when done.
@@ -23,6 +23,13 @@ os.system('if not exist frames mkdir frames && if not exist generated mkdir gene
 os.system('if exist frames cd frames && del /s /q * >nul')
 os.system('if exist generated cd generated && del /s /q * >nul')
 os.system('if exist output.gif del /s /q output.gif >nul')
+os.system('if exist raw.gif del /s /q raw.gif >nul')
+os.system('color')
+error = colored('[ERROR]','red')
+warn = colored('[WARN]','yellow')
+ok = colored('[OK]','blue')
+info = colored('[INFO]','green')
+start = colored('[START]','magenta')
 
 layout = [
     [sg.Text('Select a file:'), sg.InputText(key='-FILE-', enable_events=True), sg.FileBrowse()],
@@ -36,8 +43,8 @@ layout = [
     [sg.Text('Image Generation:', size=(15, 1)), sg.ProgressBar(100, orientation='h', size=(20, 20), key='-IMAGE_GEN_PROGRESS-')]
 ]
 
-
-
+max_threads = os.cpu_count()
+print(info,f'Running with {max_threads} threads.')
 
 window = sg.Window('GIF Creator', layout)
 
@@ -59,15 +66,17 @@ while True:
 commands = '-s generated --only-save'
 if fullscale:
     commands = commands + ' -f'
+    print(warn,f'Using FULLSCALE generation command')
 if fullchar:
     commands = commands + ' -c'
+    print(warn,f'Using FULLCHAR generation command')
 if color:
     commands = commands + ' -C'
-print(commands)
+    print(warn,f'Using COLOR generation command')
 # Read the GIF or MP4 file using imageio
 frames = imageio.mimread(file_path, memtest=False)
 total_frames = len(frames)
-print(f'Extracting {total_frames} frames.')
+print(start,f'Extracting {total_frames} frames.')
 
 frame_extract_progress_bar = window['-FRAME_EXTRACT_PROGRESS-']
 frame_extract_progress_bar.UpdateBar(0, total_frames)
@@ -99,7 +108,7 @@ def get_video_fps(file_path):
             total_frames = int(video_clip.fps * video_clip.duration)
             total_duration = video_clip.duration
     except Exception as e:
-        print(f"Error: {e}")
+        print(error,f"Error: {e}")
         return None
 
     # Calculate the frames per second (FPS)
@@ -111,20 +120,20 @@ def save_frame(frame, index):
     try:
         image.save(fr'frames\frame{index}.png', optimize=True, quality=100)
     except IndexError:
-        print(f'frame {index} broke.')
+        print(error,f'frame {index} broke.')
 
 # Save frames using multithreading
-with ThreadPoolExecutor(max_workers=12) as executor:
+with ThreadPoolExecutor(max_workers=max_threads) as executor:
     for i, frame in enumerate(frames):
         executor.submit(save_frame, frame, i)
         frame_extract_progress_bar.UpdateBar(i+1)
 
 files = os.listdir(os.getcwd()+r'\frames')
 extracted_frames = len(files)
-print(f'Extracted {extracted_frames} frames.')
+print(ok,f'Extracted {extracted_frames} frames.')
 
 def process_frame(item):
-    os.system(f"ascii-image-converter.exe frames\{item} {commands}")
+    os.system(f"start /W /B ascii-image-converter.exe frames\{item} {commands}")
     global processed_frames
     processed_frames += 1
     image_gen_progress_bar.UpdateBar(processed_frames)
@@ -132,7 +141,7 @@ def process_frame(item):
 # Convert frames to ASCII using multithreading
 processed_frames = 0
 
-with ThreadPoolExecutor() as executor:
+with ThreadPoolExecutor(max_workers=max_threads) as executor:
     futures = []
     for item in files:
         future = executor.submit(process_frame, item)
@@ -147,9 +156,10 @@ with ThreadPoolExecutor() as executor:
                 futures.remove(future)
                 image_gen_progress_bar.UpdateBar(processed_frames)
 
-print('\nAll frames processed.')
+print(ok,'All frames processed.')
 
 # PNG to GIF conversion
+print(start,'Starting ASCII conversion')
 
 png_files = os.listdir(os.getcwd()+r'\generated')
 
@@ -163,7 +173,7 @@ for item in png_files:
         frame_number = re.sub('[^0-9]', '', item)
         frames_data[frame_number] = item
         progress = processed_files / len(png_files) * 100
-        print(f'Reading ASCII files: {progress:.2f}% [{processed_files}/{len(png_files)}]', end='\r', flush=True)
+        print(ok,f'Reading ASCII files: {progress:.2f}% [{processed_files}/{len(png_files)}]', end='\r', flush=True)
 
 png_files = []
 
@@ -185,6 +195,8 @@ durations = [gif_frame_duration] * len(frames)
 
 # Add infinite loop parameter to the durations list
 durations.append(0)
+print(ok,'ASCII conversion complete.')
+print(start,'Saving gif. This may take a while...')
 
 def update_progress():
     image_gen_progress_bar.UpdateBar(processed_frames)
@@ -193,14 +205,20 @@ imageio.mimsave(gif_output_path, frames, duration=durations,
                 loop=loop_count, progress_callback=update_progress)
 
 image_gen_progress_bar.UpdateBar(processed_frames)
-print('\nGIF created.')
-
+print(ok,'GIF created.')
+print(start,'Optimizing GIF.')
 os.system('gifsicle.exe raw.gif --colors 256 -o output.gif')
 os.remove('raw.gif')
 
-print(f"GIF saved as output.gif")
+print(ok,f"GIF optimized and saved as output.gif")
 time.sleep(2)
 if opengif:
+    print(start,'Launching GIF viewer.')
     os.system('output.gif')
+    print(ok,'Launched.')
 if cleanup:
+    print(info,'Cleaning files.')
     os.system('rmdir /s /q generated && rmdir /s /q frames')
+    print(ok,'Files deleted.')
+print(ok,'Generation complete! Closing in 5 seconds!')
+time.sleep(5)
