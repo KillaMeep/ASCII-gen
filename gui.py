@@ -196,7 +196,7 @@ durations = [gif_frame_duration] * len(frames)
 # Add infinite loop parameter to the durations list
 durations.append(0)
 print(ok,'ASCII conversion complete.')
-print(start,'Saving gif. This may take a while...')
+print(start,'Saving GIF. This may take a while...')
 
 def update_progress():
     image_gen_progress_bar.UpdateBar(processed_frames)
