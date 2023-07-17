@@ -1,35 +1,53 @@
 import time
 import os
-from concurrent.futures import ThreadPoolExecutor
 import threading
 import re
-from tkinter import Tk, filedialog
-import imageio
+from concurrent.futures import ThreadPoolExecutor
+import PySimpleGUI as sg
 from PIL import Image
 from moviepy.editor import VideoFileClip
 from tqdm import tqdm
+import imageio
+import subprocess
+
+
+#SWITCHES#
+optimize = True  # uses more characters, but the output file is bigger
+#END SWITCHES#
 
 os.system('if not exist frames mkdir frames && if not exist generated mkdir generated')
 os.system('if exist frames cd frames && del /s /q * >nul')
 os.system('if exist generated cd generated && del /s /q * >nul')
 os.system('if exist output.gif del /s /q output.gif >nul')
 
-root = Tk()
-root.withdraw()
-file_path = filedialog.askopenfilename(filetypes=[("MP4 files", "*.mp4"), ("GIF files", "*.gif")])
-root.destroy()
+layout = [
+    [sg.Text('Select a file:'), sg.InputText(key='-FILE-', enable_events=True), sg.FileBrowse()],
+    [sg.Checkbox('Optimize', default=optimize, key='-OPTIMIZE-')],
+    [sg.Button('Create GIF')]
+]
 
+window = sg.Window('GIF Creator', layout)
 
-
+while True:
+    event, values = window.read()
+    if event == sg.WINDOW_CLOSED:
+        break
+    if event == 'Create GIF':
+        file_path = values['-FILE-']
+        optimize = values['-OPTIMIZE-']
+        window.close()
+        break
 
 # Read the GIF or MP4 file using imageio
 frames = imageio.mimread(file_path, memtest=False)
 print(f'Extracting {len(frames)} frames.')
 
+
 def calculate_frame_duration(fps, num_frames):
     frame_duration = 1.0 / fps
     total_duration = frame_duration * num_frames
     return frame_duration
+
 
 def get_video_fps(file_path):
     total_frames = 0
@@ -62,7 +80,7 @@ def get_video_fps(file_path):
 def save_frame(frame, index):
     image = Image.fromarray(frame)
     try:
-        image.save(fr'frames\frame{index}.png', optimize=True, quality=80)
+        image.save(fr'frames\frame{index}.png', optimize=True, quality=100)
     except IndexError:
         print(f'frame {index} broke.')
 
@@ -75,7 +93,10 @@ files = os.listdir(os.getcwd()+r'\frames')
 print(f'Extracted {len(files)} frames.')
 
 def process_frame(item):
-    os.system(f"start /W /min ascii-image-converter.exe frames\{item} -C -f -s generated")
+    if optimize:
+        os.system(f"ascii-image-converter.exe frames\{item} -C -f -s generated --only-save")
+    else:
+        os.system(f"ascii-image-converter.exe frames\{item} -C -c -f -s generated --only-save")
     with lock:
         global processed_frames
         processed_frames += 1
