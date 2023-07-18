@@ -35,7 +35,7 @@ info = colored('[INFO]', 'green')
 
 layout = [
     [sg.Text('Select a file:'), sg.InputText(key='-FILE-', enable_events=True), sg.FileBrowse()],
-    [sg.Checkbox('Open Final GIF', default=opengif, key='-GIF-', tooltip='Opens the final gif in the native viewer when done.')],
+    [sg.Checkbox('Open Final Result', default=opengif, key='-GIF-', tooltip='Opens the final result in the native viewer when done.')],
     [sg.Checkbox('Cleanup', default=cleanup, key='-CLEAN-', tooltip='Toggles file cleanup on close. Only turn off if you need the extracted/generated frames.')],
     [sg.Checkbox('Use More Characters', default=fullchar, key='-OPTIMIZE-', tooltip='Uses all available characters. Higher res, much bigger file.')],
     [sg.Checkbox('Use Color', default=color, key='-COLOR-', tooltip='Toggles color generation mode')],
@@ -50,6 +50,9 @@ max_threads = os.cpu_count()
 print(info, f'Running with {max_threads} threads.')
 
 window = sg.Window('GIF Creator', layout)
+
+
+
 
 while True:
     event, values = window.read()
@@ -68,6 +71,9 @@ while True:
         window.finalize()  # Prevent GUI from closing
         break
 
+
+
+
 commands = '-s generated --only-save'
 if not fullscale:
     commands = commands + ' -f'
@@ -78,6 +84,27 @@ if fullchar:
 if color:
     commands = commands + ' -C'
     print(warn, f'Using COLOR generation command')
+
+
+
+if any(item in file_path for item in ['.jpg', '.jpeg', '.png']):
+    os.system(f"start /W /B ascii-image-converter.exe {file_path} {commands}")
+    png_files = os.listdir(os.getcwd() + r'\generated')
+    if len(png_files) == 1:
+        new_file = fr'generated\{png_files[0]}'
+        os.rename(new_file,r'generated\output.png')
+        print(info, r'Saved in generated dir as "output.png"')
+    else:
+        print(error, 'Image conversion failed.')
+        exit(1)
+
+    if opengif:
+        print(info, 'Launching viewer.')
+        os.system(r'generated\output.png')
+    print(ok, 'Launched.')
+    print(ok, 'Closing in 5...')
+    time.sleep(5)
+    exit(0)
 
 # Read the GIF or MP4 file using imageio
 frames = imageio.mimread(file_path, memtest=False)
