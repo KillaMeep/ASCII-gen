@@ -97,12 +97,11 @@ if any(item in file_path for item in ['.jpg', '.jpeg', '.png']):
     else:
         print(error, 'Image conversion failed.')
         exit(1)
-
     if opengif:
         print(info, 'Launching viewer.')
         os.system(r'generated\output.png')
-    print(ok, 'Launched.')
-    print(ok, 'Closing in 5...')
+        print(ok, 'Launched.')
+    print(ok, 'Generation complete! Closing in 5 seconds!')
     time.sleep(5)
     exit(0)
 
