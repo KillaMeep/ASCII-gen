@@ -25,6 +25,10 @@ fullscale = False  # false uses full res, true makes image smaller, lower res
 # END SWITCHES #
 
 
+system = platform.system()
+print(f'Running on {system}')
+
+
 def deldir(relpath):
     for item in os.listdir(relpath):
         os.remove(f'{relpath}/{item}')
@@ -41,7 +45,7 @@ for item in ['raw.gif','output.gif']:
     if item in files:
         os.remove(item)
 
-if platform.system() == 'Windows':
+if system == 'Windows':
     os.system('color')
 error = colored('[ERROR]', 'red')
 warn = colored('[WARN]', 'yellow')
@@ -103,18 +107,21 @@ if color:
 
 
 if any(item in file_path for item in ['.jpg', '.jpeg', '.png']):
-    os.system(f"start /W /B ascii-image-converter.exe {file_path} {commands}")
-    png_files = os.listdir(os.getcwd() + r'\generated')
+    if system == 'Windows':
+        os.system(f"start /W /B ascii-image-converter.exe {file_path} {commands}")
+    elif system == 'Linux':
+        os.system(f'ascii-image-converter {file_path} {commands}')
+    png_files = os.listdir(os.getcwd() + r'/generated')
     if len(png_files) == 1:
-        new_file = fr'generated\{png_files[0]}'
-        os.rename(new_file,r'generated\output.png')
+        new_file = fr'generated/{png_files[0]}'
+        os.rename(new_file,r'generated/output.png')
         print(info, r'Saved in generated dir as "output.png"')
     else:
         print(error, 'Image conversion failed.')
         exit(1)
     if opengif:
         print(info, 'Launching viewer.')
-        os.system(r'generated\output.png')
+        os.system(r'generated/output.png')
         print(ok, 'Launched.')
     print(ok, 'Generation complete! Closing in 5 seconds!')
     time.sleep(5)
@@ -167,7 +174,7 @@ def get_video_fps(file_path):
 def save_frame(frame, index):
     image = Image.fromarray(frame)
     try:
-        image.save(fr'frames\frame{index}.png', optimize=True, quality=100)
+        image.save(fr'frames/frame{index}.png', optimize=True, quality=100)
     except IndexError:
         print(error, f'frame {index} broke.')
 
@@ -181,13 +188,16 @@ with ThreadPoolExecutor(max_workers=max_threads) as executor:
         frame_count += 1
         frame_extract_progress_bar.UpdateBar(frame_count)
 
-files = os.listdir(os.getcwd() + r'\frames')
+files = os.listdir(os.getcwd() + r'/frames')
 extracted_frames = len(files)
 print(ok, f'Extracted {extracted_frames} frames.')
 
 
 def process_frame(item):
-    os.system(f"start /W /B ascii-image-converter.exe frames\{item} {commands}")
+    if system == 'Windows':
+        os.system(f"start /W /B ascii-image-converter.exe frames/{item} {commands}")
+    elif system == 'Linux':
+        os.system(f'ascii-image-converter frames/{item} {commands}')
     global processed_frames
     processed_frames += 1
     # image_gen_progress_bar.UpdateBar(processed_frames)  # Removed
@@ -217,7 +227,7 @@ print(ok, 'All frames processed.')
 # PNG to GIF conversion
 print(info, 'Starting frame collection')
 
-png_files = os.listdir(os.getcwd() + r'\generated')
+png_files = os.listdir(os.getcwd() + r'/generated')
 
 frames_data = {}
 
@@ -240,7 +250,7 @@ gif_progress_bar.UpdateBar(0, 4)
 for x in range(0, len(frames_data)):
     png_files.append(frames_data[str(x)])
 gif_progress_bar.UpdateBar(1)
-frames = [imageio.imread(os.path.join('generated', file)) for file in png_files]
+frames = [imageio.imread(f'generated/{file}') for file in png_files]
 fps = int(get_video_fps(file_path))
 frame_duration = calculate_frame_duration(fps, len(frames))
 gif_output_path = 'raw.gif'
@@ -259,12 +269,15 @@ gif_progress_bar.UpdateBar(2)
 
 
 imageio.mimsave(gif_output_path, frames, duration=durations,
-                loop=loop_count,)
+                loop=loop_count)
 image_gen_progress_bar.UpdateBar(processed_frames)
 print(ok, 'GIF created.')
 gif_progress_bar.UpdateBar(3)
 print(info, 'Optimizing GIF.')
-os.system('gifsicle.exe raw.gif --colors 256 -o output.gif')
+if system == 'Windows':
+    os.system('gifsicle.exe raw.gif --colors 256 -o output.gif')
+elif system == 'Linux':
+    os.system('gifsicle raw.gif --colors 256 -o output.gif')
 os.remove('raw.gif')
 
 print(ok, f"GIF optimized and saved as output.gif")
