@@ -12,6 +12,9 @@ from tqdm import tqdm
 import imageio
 import subprocess
 from termcolor import colored, cprint
+import platform
+
+
 
 # SWITCHES #
 opengif = True  # opens gif in native viewer when done.
@@ -21,13 +24,25 @@ color = False  # sets color on/off
 fullscale = False  # false uses full res, true makes image smaller, lower res
 # END SWITCHES #
 
-os.system('if not exist frames mkdir frames && if not exist generated mkdir generated')
-os.system('if exist frames cd frames && del /s /q * >nul')
-os.system('if exist generated cd generated && del /s /q * >nul')
-os.system('if exist output.gif del /s /q output.gif >nul')
-os.system('if exist raw.gif del /s /q raw.gif >nul')
 
-os.system('color')
+def deldir(relpath):
+    for item in os.listdir(relpath):
+        os.remove(f'{relpath}/{item}')
+    os.rmdir(relpath)
+
+files = os.listdir(os.getcwd())
+for item in ['frames','generated']:
+    if item not in files:
+        os.makedirs(item)
+    else:
+        for file in os.listdir(item):
+            os.remove(f'{item}/{file}')
+for item in ['raw.gif','output.gif']:
+    if item in files:
+        os.remove(item)
+
+if platform.system() == 'Windows':
+    os.system('color')
 error = colored('[ERROR]', 'red')
 warn = colored('[WARN]', 'yellow')
 ok = colored('[OK]', 'cyan')
@@ -263,7 +278,8 @@ if opengif:
     print(ok, 'Launched.')
 if cleanup:
     print(info, 'Cleaning files.')
-    os.system('rmdir /s /q generated && rmdir /s /q frames')
+    deldir('generated')
+    deldir('frames')
     print(ok, 'Files deleted.')
 print(ok, 'Generation complete! Closing in 5 seconds!')
 time.sleep(5)
