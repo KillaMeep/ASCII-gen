@@ -3,4 +3,4 @@ sudo apt update
 sudo apt install -y ascii-image-converter
 sudo apt install -y gifsicle
 sudo apt install -y python3-tk
-python3 -m pip3 install -r requirements.txt
+python3 -m pip install -r requirements.txt
