@@ -1,0 +1,5 @@
+pysimplegui
+tk
+pillow
+moviepy
+termcolor
