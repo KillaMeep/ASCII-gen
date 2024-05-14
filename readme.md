@@ -74,12 +74,12 @@ The ASCII-gen project is an open-source software designed to convert image seque
 
 ##  Modules
 
-<details closed><summary>.</summary>
+<details closed><summary>EXPAND</summary>
 
 | File                                                                                            | Summary                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | ---                                                                                             | ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | [requirements.txt](https://github.com/KillaMeep/ASCII-gen.git/blob/master/requirements.txt)     | In this `requirements.txt` file, necessary packages for the ASCII-gen project are specified. These include certifi for SSL certificates, colorama for colored output, imageio and moviepy for handling multimedia files, and others such as idna, numpy, PySimpleGUI, requests, tqdm, and urllib3. The installation of these packages enables the functionality of ASCII-gens image conversion and GUI features.                                                                                                                                                                         |
-| [installer-linux.sh](https://github.com/KillaMeep/ASCII-gen.git/blob/master/installer-linux.sh) | Installs required dependencies for running the ASCII-gen repository on Linux systems. Sets up Furyrepos ASCI-image-converter package along with gifsicle and Python3-tk, ensuring smooth execution of the projects conversion and GUI functionalities.                                                                                                                                                                                                                                                                                                                                   |
+| [installer-linux.sh](https://github.com/KillaMeep/ASCII-gen.git/blob/master/installer-linux.sh) | Installs required dependencies for running the ASCII-gen repository on Linux systems. Sets up ASCI-image-converter package along with gifsicle and Python3-tk, ensuring smooth execution of the projects conversion and GUI functionalities.                                                                                                                                                                                                                                                                                                                                   |
 | [gui.py](https://github.com/KillaMeep/ASCII-gen.git/blob/master/gui.py)                         | Extract desired frames.2. Save each frame as PNG.3. Use multithreading for faster processing.4. Convert PNG to ASCII using ascii-image-converter.5. Merge frames into a single GIF file.6. Optimize the final GIF output.7. Display or save the generated GIF.8. Optional: clean up extracted files.Continue generating frames in parallel using multithreading. Convert each PNG frame to ASCII format, merge frames into a GIF file with infinite loop, optimize, and save it as output.gif. Optionally, display or launch the generated GIF in a viewer, then delete extracted files. |
 
 </details>
@@ -90,7 +90,7 @@ The ASCII-gen project is an open-source software designed to convert image seque
 
 **System Requirements:**
 
-* **Python**: `version x.y.z`
+* **Python**: `version 3.10 to 3.12`
 
 ###  Installation
 
@@ -118,23 +118,9 @@ The ASCII-gen project is an open-source software designed to convert image seque
 
 > Run ASCII-gen using the command below:
 > ```console
-> $ python main.py
+> $ python gui.py
 > ```
 
-###  Tests
-
-> Run the test suite using the command below:
-> ```console
-> $ pytest
-> ```
-
----
-
-##  Project Roadmap
-
-- [X] `► INSERT-TASK-1`
-- [ ] `► INSERT-TASK-2`
-- [ ] `► ...`
 
 ---
 
@@ -183,15 +169,7 @@ Contributions are welcome! Here are several ways you can contribute:
 
 ---
 
-##  License
 
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-##  Acknowledgments
-
-- List any resources, contributors, inspiration, etc. here.
 
 [**Return**](#-overview)
 
