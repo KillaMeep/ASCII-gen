@@ -12,14 +12,14 @@
 <details open>
   <summary>Table of Contents</summary><br>
 
-- [ Overview](#-overview)
-- [ Features](#-features)
-- [ Repository Structure](#-repository-structure)
-- [ Modules](#-modules)
-- [ Getting Started](#-getting-started)
-  - [ Installation](#-installation)
-  - [ Usage](#-usage)
-- [ Contributing](#-contributing)
+- [ Overview](#overview)
+- [ Features](#features)
+- [ Repository Structure](#repository-structure)
+- [ Modules](#modules)
+- [ Getting Started](#getting-started)
+  - [ Installation](#installation)
+  - [ Usage](#usage)
+- [ Contributing](#contributing)
 </details>
 <hr>
 
