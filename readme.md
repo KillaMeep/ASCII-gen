@@ -102,7 +102,6 @@ ASCII-gen is an open-source image-to-ASCII converter that allows users to transf
 
 ###  Usage
 
-<h4>From <code>source</code></h4>
 
 > Run the program!:
 > ```console
