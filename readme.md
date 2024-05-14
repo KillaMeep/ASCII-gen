@@ -66,7 +66,7 @@ ASCII-gen is an open-source image-to-ASCII converter that allows users to transf
 
 ##  Modules
 
-<details closed><summary>.</summary>
+<details open><summary>Expand</summary>
 
 | File                                                                                            | Summary                                                                                                                                                                                                                                                                                                                                                                    |
 | ---                                                                                             | ---                                                                                                                                                                                                                                                                                                                                                                        |
