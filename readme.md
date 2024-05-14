@@ -83,7 +83,7 @@ ASCII-gen is an open-source image-to-ASCII converter that allows users to transf
 
 **System Requirements:**
 
-* **None**: `version 3.10 to 3.12`
+* **Python**: `version 3.10 to 3.12`
 
 ###  Installation
 
