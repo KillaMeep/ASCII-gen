@@ -33,7 +33,7 @@ ASCII-gen is an open-source image-to-ASCII converter that allows users to transf
 
 |    |   Feature         | Description |
 |----|-------------------|---------------------------------------------------------------|
-| ⚙️  | **Architecture**  | The project mainly runs in a GUI, the gui.py file.|
+| ⚙️  | **Architecture**  | The project mainly runs in a GUI using PySimpleGui|
 | 🔌 | **Integrations**  | The project integrates external libraries such as `requests`, `Pillow`, `moviepy`, `tkinter`, `PySimpleGUI`, `urllib3`, `certifi`, `rsa`, `numpy`, and more.|
 | 🧩 | **Modularity**    | The project's structure is modular with each functionality separated into a dedicated Python script, enhancing code organization, reusability, and maintenance.|
 | ⚡️  | **Performance**   | Written to work dynamically with multithreading. |
