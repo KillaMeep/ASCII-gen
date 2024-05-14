@@ -5,7 +5,7 @@
     <h1 align="center">ASCII-GEN</h1>
 </p>
 <p align="center">
-    <em>Quickly Converting media ASCII, efficiently)</em>
+    <em>Quickly Converting media to ASCII!</em>
 </p>
 <p align="center">
 	<!-- default option, no dependency badges. -->
