@@ -5,14 +5,8 @@
     <h1 align="center">ASCII-GEN</h1>
 </p>
 <p align="center">
-    <em>Faster, Brighter!(Converting films to artier ASCII, efficiently)</em>
+    <em>Quickly Converting media ASCII, efficiently)</em>
 </p>
-<p align="center">
-	<img src="https://img.shields.io/github/license/KillaMeep/ASCII-gen.git?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/KillaMeep/ASCII-gen.git?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/KillaMeep/ASCII-gen.git?style=default&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/KillaMeep/ASCII-gen.git?style=default&color=0080ff" alt="repo-language-count">
-<p>
 <p align="center">
 	<!-- default option, no dependency badges. -->
 </p>
