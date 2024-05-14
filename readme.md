@@ -9,7 +9,7 @@
 </p>
 
 <br><!-- TABLE OF CONTENTS -->
-<details>
+<details open>
   <summary>Table of Contents</summary><br>
 
 - [ Overview](#-overview)
