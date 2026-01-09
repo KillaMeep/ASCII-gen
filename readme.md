@@ -14,12 +14,10 @@
 
 - [ Overview](#overview)
 - [ Features](#features)
-- [ Repository Structure](#repository-structure)
 - [ Modules](#modules)
 - [ Getting Started](#getting-started)
   - [ Installation](#installation)
   - [ Usage](#usage)
-- [ Contributing](#contributing)
 </details>
 <hr>
 
@@ -38,29 +36,6 @@ ASCII-gen is an open-source image-to-ASCII converter that allows users to transf
 | 🧩 | **Modularity**    | The project's structure is modular with each functionality separated into a dedicated Python script, enhancing code organization, reusability, and maintenance.|
 | ⚡️  | **Performance**   | Written to work dynamically with multithreading. |
 | 📦 | **Dependencies**  | The project depends on various external libraries and frameworks, listed within the `requirements.txt`.|
-
----
-
-##  Repository Structure
-
-```sh
-└── ASCII-gen/
-    ├── ascii-image-converter.exe
-    ├── examples
-    │   ├── fractal.gif
-    │   ├── logo.png
-    │   ├── moai.png
-    │   ├── purple haze.gif
-    │   ├── static haze rain.gif
-    │   ├── tesseract.gif
-    │   └── vortex.gif
-    ├── gifsicle.exe
-    ├── gui.py
-    ├── installer-linux.sh
-    ├── readme.md
-    ├── requirements.txt
-    └── run.bat
-```
 
 ---
 
@@ -114,43 +89,6 @@ ASCII-gen is an open-source image-to-ASCII converter that allows users to transf
 > $ pip3 install -r requirements.txt
 > $ python3 gui.py
 
-
-
-
----
-
-##  Contributing
-
-Contributions are welcome! Here are several ways you can contribute:
-
-- **[Report Issues](https://github.com/KillaMeep/ASCII-gen.git/issues)**: Submit bugs found or log feature requests for the `ASCII-gen` project.
-- **[Submit Pull Requests](https://github.com/KillaMeep/ASCII-gen.git/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
-- **[Join the Discussions](https://github.com/KillaMeep/ASCII-gen.git/discussions)**: Share your insights, provide feedback, or ask questions.
-
-<details closed>
-<summary>Contributing Guidelines</summary>
-
-1. **Fork the Repository**: Start by forking the project repository to your github account.
-2. **Clone Locally**: Clone the forked repository to your local machine using a git client.
-   ```sh
-   git clone https://github.com/KillaMeep/ASCII-gen.git
-   ```
-3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
-   ```sh
-   git checkout -b new-feature-x
-   ```
-4. **Make Your Changes**: Develop and test your changes locally.
-5. **Commit Your Changes**: Commit with a clear message describing your updates.
-   ```sh
-   git commit -m 'Implemented new feature x.'
-   ```
-6. **Push to github**: Push the changes to your forked repository.
-   ```sh
-   git push origin new-feature-x
-   ```
-7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
-8. **Review**: Once your PR is reviewed and approved, it will be merged into the main branch. Congratulations on your contribution!
-</details>
 
 
 
