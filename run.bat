@@ -16,7 +16,8 @@ rem Activate the virtual environment
 call %venv_dir%\Scripts\activate
 
 rem Install requirements if not already installed
-python -m pip install -r %requirements_file%
+python -m pip install uv
+python -m uv pip install -r %requirements_file%
 
 rem Run the GUI script
 python %gui_script%
